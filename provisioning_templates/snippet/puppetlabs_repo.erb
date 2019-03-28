@@ -44,7 +44,7 @@ repo_subdir = host_param_true?('enable-puppetlabs-puppet5-repo') ? 'puppet5/' : 
 -%>
 
 <% if repo_name -%>
-<% if os_family == 'Redhat' || os_name == 'SLES' -%>
+<% if os_family == 'Redhat' || os_family == 'Suse' -%>
 rpm -Uvh<%= http_proxy %><%= http_port %> https://<%= repo_host %>/<%= repo_subdir %><%= repo_name %>-<%= repo_os %>-<%= os_major %>.noarch.rpm
 <% elsif os_family == 'Debian' -%>
 apt-get update
