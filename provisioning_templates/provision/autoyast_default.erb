@@ -11,6 +11,7 @@ oses:
   pm_set = @host.puppetmaster.empty? ? false : true
   puppet_enabled = pm_set || host_param_true?('force-puppet')
   salt_enabled = host_param('salt_master') ? true : false
+  os_major = @host.operatingsystem.major.to_i
 
   primary_interface_identifier = @host.primary_interface.identifier.blank? ? 'eth0' : @host.primary_interface.identifier
   primary_interface_subnet = @host.primary_interface.subnet
@@ -135,11 +136,12 @@ oses:
 <% if puppet_enabled -%>
 <% if host_param_true?('enable-puppetlabs-pc1-repo') or host_param_true?('enable-puppetlabs-puppet5-repo') -%>
 <%
+  dist_release = os_major == 42 ? '12' : os_major
   puppet_repo_url_base = 'http://yum.puppetlabs.com'
   if host_param_true?('enable-puppetlabs-pc1-repo')
-    puppet_repo_url = "#{puppet_repo_url_base}/sles/#{os_major}/PC1/#{@host.architecture}/"
+    puppet_repo_url = "#{puppet_repo_url_base}/sles/#{dist_release}/PC1/#{@host.architecture}/"
   elsif host_param_true?('enable-puppetlabs-puppet5-repo')
-    puppet_repo_url = "#{puppet_repo_url_base}/puppet5/sles/#{os_major}/#{@host.architecture}/"
+    puppet_repo_url = "#{puppet_repo_url_base}/puppet5/sles/#{dist_release}/#{@host.architecture}/"
   end
 %>
     <listentry>
