@@ -123,13 +123,55 @@ oses:
     <packages config:type="list">
       <package>lsb-release</package>
 <% if puppet_enabled -%>
-      <package>rubygem-puppet</package>
+      <package>puppet-agent</package>
 <% end -%>
 <% if salt_enabled -%>
       <package>salt-minion</package>
 <% end -%>
     </packages>
   </software>
+  <add-on>
+    <add_on_products config:type="list">
+<% if puppet_enabled -%>
+<% if host_param_true?('enable-puppetlabs-pc1-repo') or host_param_true?('enable-puppetlabs-puppet5-repo') -%>
+<%
+  puppet_repo_url_base = 'http://yum.puppetlabs.com'
+  if host_param_true?('enable-puppetlabs-pc1-repo')
+    puppet_repo_url = "#{puppet_repo_url_base}/sles/#{os_major}/PC1/#{@host.architecture}/"
+  elsif host_param_true?('enable-puppetlabs-puppet5-repo')
+    puppet_repo_url = "#{puppet_repo_url_base}/puppet5/sles/#{os_major}/#{@host.architecture}/"
+  end
+%>
+    <listentry>
+        <media_url><![CDATA[<%= puppet_repo_url %>]]></media_url>
+        <name>puppet</name>
+        <product>puppet</product>
+        <product_dir>/</product_dir>
+        <signature-handling>
+          <accept_unknown_gpg_key>
+            <all config:type="boolean">false</all>
+            <keys config:type="list">
+              <keyid>7F438280EF8D349F</keyid>
+            </keys>
+          </accept_unknown_gpg_key>
+          <accept_non_trusted_gpg_key>
+            <all config:type="boolean">false</all>
+            <keys config:type="list">
+              <keyid>7F438280EF8D349F</keyid>
+            </keys>
+          </accept_non_trusted_gpg_key>
+          <import_gpg_key>
+            <all config:type="boolean">false</all>
+            <keys config:type="list">
+              <keyid>7F438280EF8D349F</keyid>
+            </keys>
+          </import_gpg_key>
+        </signature-handling>
+      </listentry>
+<% end -%>
+<% end -%>
+    </add_on_products>
+  </add-on>
   <users config:type="list">
     <user>
       <username>root</username>
