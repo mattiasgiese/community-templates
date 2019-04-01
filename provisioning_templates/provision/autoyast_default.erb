@@ -147,11 +147,12 @@ oses:
 <% if puppet_enabled -%>
 <% if host_param_true?('enable-puppetlabs-pc1-repo') or host_param_true?('enable-puppetlabs-puppet5-repo') -%>
 <%
+  dist_release = os_major == 42 ? '12' : os_major
   puppet_repo_url_base = 'http://yum.puppetlabs.com'
   if host_param_true?('enable-puppetlabs-pc1-repo')
-    puppet_repo_url = "#{puppet_repo_url_base}/sles/#{os_major}/PC1/#{@host.architecture}/"
+    puppet_repo_url = "#{puppet_repo_url_base}/sles/#{dist_release}/PC1/#{@host.architecture}/"
   elsif host_param_true?('enable-puppetlabs-puppet5-repo')
-    puppet_repo_url = "#{puppet_repo_url_base}/puppet5/sles/#{os_major}/#{@host.architecture}/"
+    puppet_repo_url = "#{puppet_repo_url_base}/puppet5/sles/#{dist_release}/#{@host.architecture}/"
   end
 %>
     <listentry>
